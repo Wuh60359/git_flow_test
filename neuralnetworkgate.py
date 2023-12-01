@@ -16,3 +16,38 @@ def sigmoid(x):
 def cross_entropy(y_true, y_pred):
     return -np.sum((y_true * np.log(y_pred) + (1 - y_true) * np.log(1 - y_pred)))
 
+def orGate():
+  input_x = np.array([[0,0],[0,1],[1,0],[1,1]])
+  target_y = np.array([[0],[1],[1],[1]])
+  nameGate = "OrGate"
+  return input_x,target_y,nameGate
+
+def andGate():
+  input_x = np.array([[0,0],[0,1],[1,0],[1,1]])
+  target_y = np.array([[0],[0],[0],[1]])
+  nameGate = "AndGate"
+  return input_x,target_y,nameGate
+
+def xorGate():
+  input_x = np.array([[0,0],[0,1],[1,0],[1,1]])
+  target_y = np.array([[0],[1],[1],[0]])
+  nameGate = "XorGate"
+  return input_x,target_y,nameGate
+
+def norGate():
+  input_x = np.array([[0,0],[0,1],[1,0],[1,1]])
+  target_y = np.array([[1],[0],[0],[0]])
+  nameGate = "NorGate"
+  return input_x,target_y,nameGate
+
+def nandGate():
+  input_x = np.array([[0,0],[0,1],[1,0],[1,1]])
+  target_y = np.array([[1],[1],[1],[0]])
+  nameGate = "NandGate"
+  return input_x,target_y,nameGate
+
+def Gate():
+  input_x = np.array([[1,1],[2,2],[3,3],[4,4]])
+  target_y = np.array([[1],[1],[1],[0]])
+  nameGate = "NandGate"
+
