@@ -51,3 +51,72 @@ def Gate():
   target_y = np.array([[1],[1],[1],[0]])
   nameGate = "NandGate"
 
+def neuralNetworkGate(input_layer,hidden_layer1,hidden_layer2,output_layer,input_x,target_y,epochs,learning_rate):
+  loss_list = []
+  num = []
+  cost_val = []
+
+  weight1 = np.random.rand(input_layer,hidden_layer1)
+  bias1 = np.zeros((1,hidden_layer1))
+  weight2 = np.random.rand(hidden_layer1,hidden_layer2)
+  bias2 = np.zeros((1,hidden_layer2))
+  weight3 = np.random.rand(hidden_layer2,output_layer)
+  bias3 = np.zeros((1,output_layer))
+  for epoch in range(epochs):
+    # ------------------Forward propagation------------------
+    input_hidden_layer1 = input_x.dot(weight1) + bias1
+    output_hidden_layer1 = sigmoid(input_hidden_layer1)
+
+    input_hidden_layer2 = output_hidden_layer1.dot(weight2) + bias2
+    output_hidden_layer2 = sigmoid(input_hidden_layer2)
+
+    input_hidden_layer3 = output_hidden_layer2.dot(weight3) + bias3
+    predicte_y = sigmoid(input_hidden_layer3)
+
+    loss_value = cross_entropy(target_y,predicte_y)
+
+    # ------------------Backward propagation------------------
+    backprop_error_upto_sigmoid = target_y-predicte_y
+    gradient_weight3 = (output_hidden_layer2.T.dot(backprop_error_upto_sigmoid))
+    gradient_bias3 = np.sum(backprop_error_upto_sigmoid)
+
+    backprop_error_gradient_hidden_layer2 = backprop_error_upto_sigmoid.dot(weight3.T)
+    backprop_error_upto_sigmoid_hidden_layer2 = backprop_error_gradient_hidden_layer2 * output_hidden_layer2 * (1-output_hidden_layer2)
+    gradient_weight2 = (output_hidden_layer1.T.dot(backprop_error_upto_sigmoid_hidden_layer2))
+    gradient_bias2 = np.sum(backprop_error_upto_sigmoid_hidden_layer2)
+
+    backprop_error_gradient_hidden_layer1 = backprop_error_upto_sigmoid_hidden_layer2.dot(weight2.T)
+    backprop_error_upto_sigmoid_hidden_layer1 = backprop_error_gradient_hidden_layer1  * output_hidden_layer1 * (1-output_hidden_layer1)
+    gradient_weight1 = (input_x.T.dot(backprop_error_upto_sigmoid_hidden_layer1))
+    gradient_bias1 = np.sum(backprop_error_upto_sigmoid_hidden_layer1)
+    # ----------update weight/bias---------
+    weight1 += (learning_rate * gradient_weight1)
+    bias1 += (learning_rate * gradient_bias1)
+
+    weight2 += (learning_rate * gradient_weight2)
+    bias2 += (learning_rate * gradient_bias2)
+
+    weight3 += (learning_rate * gradient_weight3)
+    bias3 += (learning_rate * gradient_bias3)
+    loss_list.append(loss_value)
+    num.append(epoch)
+
+  if nandGate()[2] == "NandGate":
+    print(f"Label NandGate: {target_y}")
+    print(f"Predicted NandGate: {predicte_y}")
+  elif orGate()[2] == "OrGate":
+    print(f"Label OrGate: {target_y}")
+    print(f"Predicted OrGate: {predicte_y}")
+  elif andGate()[2] == "AndGate":
+    print(f"Label OrGate: {target_y}")
+    print(f"Predicted OrGate: {predicte_y}")
+  elif xorGate()[2] == "XorGate":
+    print(f"Label XorGate: {target_y}")
+    print(f"Predicted XorGate: {predicte_y}")
+  elif norGate()[2] == "NorGate":
+    print(f"Label NorGate: {target_y}")
+    print(f"Predicted NorGate: {predicte_y}")
+  else:
+    print(f"Label: {target_y}")
+    print(f"Predicted: {predicte_y}")
+  return plt.scatter(num,loss_list,s=1),plt.show()
